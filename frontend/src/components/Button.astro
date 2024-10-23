@@ -1,0 +1,15 @@
+---
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+interface ButtonProps {
+    href: string
+}
+
+const { href } = Astro.props
+---
+
+<a href={href} class='w-fit flex gap-6 px-4 py-2 border-2 border-solid border-white/10 rounded-lg'>
+    <FontAwesomeIcon icon={faAngleLeft} className={'h-full'}/>
+    <span>Back</span>
+</a>

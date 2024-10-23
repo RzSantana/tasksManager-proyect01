@@ -1,0 +1,54 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Button from '@/components/Button.astro'
+import { faBolt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import RegisterForm from '@components/RegisterForm'
+
+if (Astro.request.method === 'post') {
+    try {
+        const data = await Astro.request.formData()
+        console.log(data)
+    } catch (error) {
+        console.error(error)
+    }
+}
+---
+
+<Layout title='Login'>
+    <div class='w-full h-screen grid grid-cols-1 grid-rows-[auto_1fr] p-16'>
+        <Button href='#' />
+        <div class='w-full h-full flex justify-center items-start'>
+            <div class='h-full flex flex-col gap-16 px-8 py-10 items-center'>
+                <div class='w-16 h-16 rounded-2xl p-5 bg-[#1E1E1E]'>
+                    <FontAwesomeIcon
+                        icon={faBolt}
+                        className='text-[--text-primary]'
+                    />
+                </div>
+
+                <div class='flex flex-col gap-2'>
+                    <h1 class='text-5xl font-bold'>Create An Account</h1>
+
+                    <div class='flex flex-row gap-1 text-xs justify-center'>
+                        <span>Already have an account?</span>
+                        <a
+                            href='/login'
+                            class='text-[--text-primary] font-bold text-xs justify-center'
+                            >Log in</a
+                        >
+                    </div>
+                </div>
+                
+                <RegisterForm client:load />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.querySelector('#register-form')
+        form?.addEventListener('submit', (event: Event) => {
+            event.preventDefault()
+        })
+    </script>
+</Layout>

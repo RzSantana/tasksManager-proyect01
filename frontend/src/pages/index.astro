@@ -1,0 +1,15 @@
+---
+'use client'
+
+import Layout from "../layouts/Layout.astro"
+
+let login = false
+
+if (!login) {
+	return Astro.redirect('/login')
+}
+---
+
+<Layout title="Welcome to Astro.">
+	<h1>🏠 Is Main</h1>
+</Layout>
