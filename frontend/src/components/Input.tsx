@@ -1,6 +1,7 @@
 import { type IconProp } from '@fortawesome/fontawesome-svg-core'
+import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import type { ChangeEventHandler } from 'react'
+import { useState, type ChangeEventHandler } from 'react'
 
 type Props = {
     type: astroHTML.JSX.HTMLInputTypeAttribute
@@ -8,6 +9,7 @@ type Props = {
     placeholder?: string
     onChange?: ChangeEventHandler<HTMLInputElement>
     error?: boolean
+    iconView?: boolean
     icon?: IconProp
     styleIcon?: string
 }
@@ -17,14 +19,23 @@ export default function Input({
     name,
     placeholder,
     icon,
+    iconView,
     error = false,
     onChange,
     styleIcon,
 }: Props) {
+    const [hiddenPassword, setHiddenPassword] = useState(false)
+
     return (
         <div className='relative'>
             <input
-                type={type}
+                type={
+                    type == 'password'
+                        ? hiddenPassword
+                            ? 'text'
+                            : 'password'
+                        : type
+                }
                 placeholder={placeholder}
                 name={name}
                 onChange={onChange}
@@ -33,14 +44,27 @@ export default function Input({
                     error ? 'border-[--err]' : 'border-white/10'
                 } text-red text-sm placeholder:text-sm hover:border-white/40 focus:border-[--hover] autofill:bg-red-500`}
             />
-            {icon ? (
-                <FontAwesomeIcon
-                    icon={icon}
-                    className={`w-5 h-5 absolute top-1/2 -translate-y-1/2 right-4 ${styleIcon} `}
-                />
-            ) : (
-                ''
-            )}
+
+            <div className='absolute flex flex-row gap-2 top-1/2 -translate-y-1/2 right-4'>
+                {iconView ? (
+                    <FontAwesomeIcon
+                        icon={hiddenPassword ? faEye : faEyeSlash}
+                        onClick={() => setHiddenPassword(!hiddenPassword)}
+                        className={`w-5 h-5 cursor-pointer`}
+                    />
+                ) : (
+                    ''
+                )}
+
+                {icon ? (
+                    <FontAwesomeIcon
+                        icon={icon}
+                        className={`w-5 h-5 ${styleIcon} `}
+                    />
+                ) : (
+                    ''
+                )}
+            </div>
         </div>
     )
 }

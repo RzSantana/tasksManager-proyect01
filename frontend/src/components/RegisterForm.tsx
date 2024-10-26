@@ -25,14 +25,17 @@ export default function LoginForm() {
         
         const validPassword = passwordRegex.test(password)
         const validConfirmPassword = (password === confirmPassword)
-    
+        const validEmail = (email !== 'test@test.com')
+
         const newErrors = {
             ...errors,
+            email: !validEmail,
             password: !validPassword,
             confirmPassword: !validConfirmPassword,    
         }
 
         setErrors(newErrors)
+        console.log(newErrors)
 
         return !Object.values(newErrors).includes(true)
     }
@@ -42,6 +45,7 @@ export default function LoginForm() {
         
         const isValidForm = validateForm()
         
+
         if (isValidForm) {
             console.log('Formulario valido')
         } else {
@@ -90,6 +94,7 @@ export default function LoginForm() {
                     placeholder='Password'
                     styleIcon='text-[--err]'
                     error={errors.password}
+                    iconView={true}
                     icon={errors.password ? faCircleXmark : undefined}
                     onChange={(event) => {
                         setPassword(event.target.value)
@@ -101,6 +106,7 @@ export default function LoginForm() {
                     placeholder='Confirm Password'
                     styleIcon='text-[--err]'
                     error={errors.confirmPassword}
+                    iconView={true}
                     icon={errors.confirmPassword ? faCircleXmark : undefined}
                     onChange={(event) => {
                         setConfirmPassword(event.target.value)
