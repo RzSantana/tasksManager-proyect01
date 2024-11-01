@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, type User } from '@prisma/client'
+import { PrismaClient, type User } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -14,13 +14,7 @@ class UserService {
     }
 
     public async createUser(data: User) {
-        try {
-             return await prisma.user.create({ data })
-        } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                return 
-            }
-        }
+        return await prisma.user.create({ data })
     }
 
     public async deleteUser(uuid: string) {
