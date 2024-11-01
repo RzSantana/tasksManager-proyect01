@@ -1,6 +1,6 @@
 import Input from '@/components/Input'
 import SubmitButton from '@/components/SubmitButton'
-import { error } from 'node_modules/astro/dist/core/logger/core';
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { useState, type FormEvent } from 'react'
 
 export default function LoginForm() {
@@ -12,24 +12,45 @@ export default function LoginForm() {
         confirmPassword: false,
         terms: false
     });
+
     const [name, setName] = useState<string>('')
     const [lastname, setLastname] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [confimPassword, setConfigPassword] = useState<string>('')
+    const [confirmPassword, setConfirmPassword] = useState<string>('')
     const [terms, setTerms] = useState(false)
 
-    const isValidConfirmPassword = () => {
-        if (password != confimPassword) {
-            setErrors({...errors, confirmPassword: true})            
-            return
-        }
-    }
+    const validateForm = () => {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        
+        const validPassword = passwordRegex.test(password)
+        const validConfirmPassword = (password === confirmPassword)
+        const validEmail = (email !== 'test@test.com')
 
+        const newErrors = {
+            ...errors,
+            email: !validEmail,
+            password: !validPassword,
+            confirmPassword: !validConfirmPassword,    
+        }
+
+        setErrors(newErrors)
+        console.log(newErrors)
+
+        return !Object.values(newErrors).includes(true)
+    }
+    
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         
-        isValidConfirmPassword()
+        const isValidForm = validateForm()
+        
+
+        if (isValidForm) {
+            console.log('Formulario valido')
+        } else {
+            console.log('Formulario invalido')
+        }
     }
 
     return (
@@ -71,6 +92,10 @@ export default function LoginForm() {
                     type='password'
                     name='password'
                     placeholder='Password'
+                    styleIcon='text-[--err]'
+                    error={errors.password}
+                    iconView={true}
+                    icon={errors.password ? faCircleXmark : undefined}
                     onChange={(event) => {
                         setPassword(event.target.value)
                     }}
@@ -79,9 +104,12 @@ export default function LoginForm() {
                     type='password'
                     name='confirm-password'
                     placeholder='Confirm Password'
+                    styleIcon='text-[--err]'
                     error={errors.confirmPassword}
+                    iconView={true}
+                    icon={errors.confirmPassword ? faCircleXmark : undefined}
                     onChange={(event) => {
-                        setConfigPassword(event.target.value)
+                        setConfirmPassword(event.target.value)
                     }}
                 />
 
